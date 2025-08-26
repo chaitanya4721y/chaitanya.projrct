@@ -21,7 +21,7 @@
 }
 
 .logo {
-  background-image: url("images/amazon_logo.png");
+  background-image: url("https://xzkiphnprdjxcxkmocvf.supabase.co/storage/v1/object/public/products/amazon_logo.png");
   background-size: cover;
   height: 50px;
   width: 100px;
@@ -470,4 +470,5 @@ a:hover {
   background: #d97706;
 }
 /* ===== Cart Page Styles ===== */
+
 
