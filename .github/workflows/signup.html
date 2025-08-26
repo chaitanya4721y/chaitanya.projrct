@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet"> 
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    form {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #0070f3;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #toggle-password {
+      margin-top: -10px;
+      margin-bottom: 10px;
+      background: none;
+      border: none;
+      color: #0070f3;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    p#message {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<form id="signup-form">
+  <h2>Sign Up</h2>
+  <input type="text" id="name" placeholder="Full Name" required />
+  <input type="text" id="country" placeholder="Country" required />
+  <input type="text" id="status" placeholder="Status" required />
+  <input type="email" id="email" placeholder="Email Address" required />
+  <input type="password" id="password" placeholder="Password" required />
+  <button type="button" id="toggle-password">Show Password</button>
+  <button type="submit">Sign Up</button>
+  <p id="message"></p>
+</form>
+
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js"
+ 
+
+  const supabaseUrl = 'https://xzkiphnprdjxcxkmocvf.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6a2lwaG5wcmRqeGN4a21vY3ZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxOTc3NDIsImV4cCI6MjA2OTc3Mzc0Mn0.IIB9czzGljZTEs1N9TAkAoWnI0dAq2tLpQQPsZplSyc';  // DO NOT use service_role here
+  const supabase = createClient(supabaseUrl, supabaseKey)
+
+  const form = document.getElementById('signup-form')
+  const msg = document.getElementById('message')
+  const passwordInput = document.getElementById('password')
+  const toggleBtn = document.getElementById('toggle-password')
+
+  toggleBtn.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password'
+    passwordInput.type = type
+    toggleBtn.innerText = type === 'text' ? 'Hide Password' : 'Show Password'
+  })
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    msg.innerText = 'Signing up...'
+
+    const { name, country, status, email, password } = {
+      name: document.getElementById('name').value,
+      country: document.getElementById('country').value,
+      status: document.getElementById('status').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value,
+    }
+
+    const { data, error } = await supabase
+      .from('users')
+      .insert([{ name, country, status, email, password }])
+
+    if (error) {
+      msg.innerText = 'Error: ' + error.message
+    } else {
+      msg.style.color = 'green'
+      msg.innerText = 'Signup successful! Redirecting...'
+      setTimeout(() => {
+        window.location.href = 'index.html' // your main page
+      }, 2000)
+    }
+  })
+</script>
+
+</body>
+</html>
